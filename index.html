@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- CHANGE WEBSITE TITLE HERE -->
+<title>Pantnagar Green Trails · GBPUAT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<!-- QR library (only external dependency) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+<header class="nav noprint">
+  <a href="#home" class="logo">🌳 <span>Pantnagar Green Trails</span></a>
+  <button id="menuBtn" aria-label="Toggle menu" aria-expanded="false">☰</button>
+  <nav id="menu">
+    <a href="#home">Home</a><a href="#trees">Explore Trees</a><a href="#rent">Rent a Bicycle</a><a href="#about">About</a><a href="#admin" class="muted">Admin</a>
+  </nav>
+</header>
+
+<main>
+<section class="view" id="view-home">
+  <div class="hero wave-b" style="background-image:linear-gradient(rgba(15,61,62,.55),rgba(15,61,62,.75)),url(img/gulmohar.jpg)">
+    <p class="tag">Discover Trees. Learn Nature. Ride Green.</p>
+    <h1>Discover the Living Campus of Pantnagar</h1>
+    <p>Learn the story of every tree. Scan a tree's QR code on campus to unlock its quiz and earn up to 50% off a campus bicycle rental.</p>
+    <div class="btns"><a class="btn pill-btn" href="#trees">Explore Trees</a><a class="btn ghost" href="#rent">Rent a Bicycle</a></div>
+  </div>
+  <div class="wrap center">
+    <h2 class="sec">Featured Trees</h2><p class="sub">Tap a tree to open its field guide</p>
+    <div class="grid" id="featured"></div>
+  </div>
+  <div class="photosec wave-t wave-b" style="background-image:linear-gradient(rgba(8,35,36,.5),rgba(8,35,36,.5)),url(img/gulmohar.jpg)">
+    <h2 class="sec light">How Tree QR Codes Work</h2>
+    <div class="feat">
+      <div><i>📷</i><b>Scan</b><p>Find a tagged tree and scan its QR label with your phone camera.</p></div>
+      <div><i>📖</i><b>Learn</b><p>Read the tree's field guide: identity, anatomy, origin, uses and legends.</p></div>
+      <div><i>🎯</i><b>Quiz</b><p>Scanning opens 3 options: About the tree, Bike rental, or Rental with discount.</p></div>
+      <div><i>🚲</i><b>Ride</b><p>Rent a bicycle at the standard or discounted price.</p></div>
+      <div><i>🏷️</i><b>Save</b><p>Score well on a 10-question quiz and save up to 50%.</p></div>
+      <div><i>🌱</i><b>Go green</b><p>Every ride is a low-carbon way to explore the campus.</p></div>
+    </div>
+  </div>
+  <div class="wrap center">
+    <h2 class="sec">Quiz &amp; Bicycle Discount</h2>
+    <p class="sub">Standard demo rental: <b id="basePrice"></b>. Scan a tree's QR code and score well on its quiz to reduce it:</p><div class="tiers" id="tiers" style="justify-content:center"></div>
+    <h2 class="sec">Prototype Statistics</h2><div class="stats" id="stats"></div>
+  </div>
+  <div class="banner wave-t" style="background-image:linear-gradient(rgba(15,61,62,.45),rgba(15,61,62,.6)),url(img/gulmohar-flower.jpg)">
+    <h2>Fastest Way to Explore Campus and Ride for Less</h2><a class="btn pill-btn" href="#rent">Rent Now</a>
+  </div>
+  <div class="cta"><div><h3>Enjoy Your Green Campus</h3><p>Travel to any corner of campus, without going around in circles.</p><a class="btn pill-btn" href="#trees">View Now!</a></div></div>
+</section>
+
+<section class="view wrap" id="view-trees" hidden>
+  <h1>Explore Trees</h1>
+  <p class="note">Sample catalogue entries. Inclusion does not confirm a species is present on campus.</p>
+  <label for="search" class="sr">Search trees</label>
+  <input id="search" type="search" placeholder="Search by name, scientific name or ID…">
+  <div class="grid" id="treeGrid"></div>
+</section>
+
+<section class="view wrap" id="view-tree" hidden><div id="treeDetail"></div></section>
+<section class="view wrap" id="view-hub" hidden><div id="hubBox"></div></section>
+<section class="view wrap" id="view-quiz" hidden><div id="quizPage"></div></section>
+
+<section class="view wrap" id="view-rent" hidden>
+  <h1>Rent a Bicycle</h1>
+  <div class="warn noprint">Prototype only. Prices are demo values and the rental duration is a configurable policy, not assumed here. ID photos stay in this browser tab during the session and are <b>not</b> uploaded or saved.</div>
+  <div id="rentFormWrap" class="card">
+    <div id="priceBox" class="pricebox"></div>
+    <form id="rentForm" novalidate>
+      <label>Full name<input name="name" required autocomplete="name"></label>
+      <label>Student ID / enrollment number<input name="sid" required></label>
+      <label>College<select name="college" id="college" required></select></label>
+      <label>Academic year<select name="year" id="year" required></select></label>
+      <label>Contact number or email<input name="contact" required></label>
+      <label>Selected bicycle<select name="bike" id="bikeSel" required></select></label>
+      <label>Student ID card photo<input type="file" id="idFile" accept="image/jpeg,image/png,image/webp" required></label>
+      <img id="idPreview" alt="ID card preview" hidden>
+      <p class="err" id="formErr" role="alert"></p>
+      <button class="btn green" type="submit">Submit Rental Request</button>
+    </form>
+  </div>
+  <div id="confirm" class="card" hidden></div>
+</section>
+
+<section class="view wrap" id="view-admin" hidden>
+  <h1>Prototype Admin Panel</h1>
+  <div class="warn">Demonstration panel with no login. Do <b>not</b> use for real student records or payments. localStorage is not a secure database.</div>
+  <div class="stats" id="adminStats"></div>
+  <div class="btns"><button class="btn green" id="addTree">+ Add sample tree</button><button class="btn danger" id="resetData">Reset demo data</button></div>
+  <h2>Bicycles</h2><div class="grid small" id="bikeAdmin"></div>
+  <h2>Trees</h2><div class="tablewrap"><table id="treeTable"></table></div>
+  <h2>Demo Rental Requests</h2><div class="tablewrap"><table id="rentTable"></table></div>
+</section>
+
+<section class="view wrap" id="view-about" hidden>
+  <h1>About</h1>
+  <div class="card"><p><b>Pantnagar Green Trails</b> is a demonstration prototype for GBPUAT Pantnagar that links campus trees, QR-code learning and sustainable bicycle use.</p>
+  <p>Tree profiles are editable sample information and should be verified by campus botanists before real use. The Gulmohar profile is adapted from the supplied field guide.</p>
+  <p>No payments are processed here. Payment details are submitted separately through a Google Form, and nothing on this site confirms payment.</p></div>
+</section>
+</main>
+
+<div id="labelArea"></div>
+<div id="qrModal" class="modal noprint" hidden><div class="card"><h3 id="qrTitle"></h3><div id="qrBox"></div><p class="note" id="qrUrl"></p><div class="btns"><button class="btn green" id="qrDl">Download PNG</button><button class="btn amber" id="qrPrint">Print Label</button><button class="btn ghost dark" id="qrClose">Close</button></div></div></div>
+
+<footer class="noprint">© 2026 Pantnagar Green Trails | GBPUAT Pantnagar · Govind Ballabh Pant University of Agriculture and Technology | Demonstration prototype: not an official university service.</footer>
+<script src="script.js"></script>
+</body>
+</html>
