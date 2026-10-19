@@ -87,13 +87,18 @@
 </section>
 
 <section class="view wrap" id="view-admin" hidden>
-  <h1>Prototype Admin Panel</h1>
+  <div id="adminLogin" class="card" style="max-width:380px;margin:2rem auto"><h1>Admin Login</h1>
+    <form id="adminForm"><label>Password<input type="password" id="adminPw" autocomplete="current-password" required></label>
+    <p class="err" id="adminMsg" role="alert"></p><button class="btn green" type="submit">Log in</button></form></div>
+  <div id="adminBody" hidden>
+  <h1>Prototype Admin Panel</h1><button class="btn ghost dark" id="adminOut" style="float:right">Log out</button>
   <div class="warn">Demonstration panel with no login. Do <b>not</b> use for real student records or payments. localStorage is not a secure database.</div>
   <div class="stats" id="adminStats"></div>
   <div class="btns"><button class="btn green" id="addTree">+ Add sample tree</button><button class="btn danger" id="resetData">Reset demo data</button></div>
   <h2>Bicycles</h2><div class="grid small" id="bikeAdmin"></div>
   <h2>Trees</h2><div class="tablewrap"><table id="treeTable"></table></div>
   <h2>Demo Rental Requests</h2><div class="tablewrap"><table id="rentTable"></table></div>
+  </div>
 </section>
 
 <section class="view wrap" id="view-about" hidden>

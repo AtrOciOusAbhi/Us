@@ -5,6 +5,8 @@ const CONFIG = {
   SITE_URL: "",
   // Paste your real Google Form link here:
   GOOGLE_FORM_URL: "PLACEHOLDER_GOOGLE_FORM_URL",
+  // Admin password stored as a SHA-256 hash. Default password is "admin123": CHANGE IT (see README note in chat).
+  ADMIN_HASH: "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9",
   RENTAL_PRICE: 30,                 // ₹ per rental (prototype value; duration is a policy decision)
   CURRENCY: "₹",
   // Discount tiers: highest minimum score (%) first
@@ -324,6 +326,24 @@ function editTree(id){
   save(K.trees,trees);renderAdmin();
 }
 
+/* ================= ADMIN LOGIN (client-side only) ================= */
+async function sha(t){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
+let fails=0,lockUntil=0;
+function showAdmin(){
+  const ok=sessionStorage.getItem("pgt_admin")==="1";
+  $("#adminLogin").hidden=ok;$("#adminBody").hidden=!ok;
+  if(ok)renderAdmin();
+}
+$("#adminForm").addEventListener("submit",async e=>{
+  e.preventDefault();const m=$("#adminMsg");
+  if(Date.now()<lockUntil){m.textContent=`Too many attempts. Try again in ${Math.ceil((lockUntil-Date.now())/1000)} s.`;return}
+  if(!(window.crypto&&crypto.subtle)){m.textContent="Login needs https:// or localhost to work.";return}
+  const h=await sha($("#adminPw").value);
+  if(h===CONFIG.ADMIN_HASH){fails=0;sessionStorage.setItem("pgt_admin","1");$("#adminPw").value="";m.textContent="";showAdmin()}
+  else{fails++;$("#adminPw").value="";m.textContent="Incorrect password.";if(fails>=5){lockUntil=Date.now()+30000;fails=0;m.textContent="Too many attempts. Locked for 30 seconds."}}
+});
+$("#adminOut").addEventListener("click",()=>{sessionStorage.removeItem("pgt_admin");showAdmin()});
+
 /* ================= ROUTING ================= */
 const VIEWS=["home","trees","tree","hub","quiz","rent","admin","about"];
 function route(){
@@ -340,7 +360,7 @@ function route(){
   if(v==="hub")renderHub(arg);
   if(v==="quiz")renderQuizPage(arg);
   if(v==="rent"){if(!$("#confirm").hidden&&!$("#confirm").innerHTML.trim())resetRent();renderRentForm()}
-  if(v==="admin")renderAdmin();
+  if(v==="admin")showAdmin();
   window.scrollTo(0,0);
 }
 function go(h){location.hash=h;if(location.hash==="#"+h&&false)route()}
